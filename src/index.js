@@ -17,17 +17,8 @@ export default {
 
     const imageUrl = `https://cdn.playfairs.cc/${key}`;
 
-    if (url.searchParams.get("raw") === "1") {
-      return new Response(object.body, {
-        headers: {
-          "Content-Type":
-            object.httpMetadata?.contentType ||
-            "application/octet-stream",
-        },
-      });
-    }
-
-    return new Response(
+    if (url.searchParams.get("embed") === "1") {
+      return new Response(
 `<!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +26,7 @@ export default {
 
 <meta property="og:title" content="${filename}">
 <meta property="og:description" content="Uploaded: ${created}">
-<meta property="og:image" content="${imageUrl}?raw=1">
+<meta property="og:image" content="${imageUrl}">
 <meta property="og:type" content="website">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -47,7 +38,16 @@ export default {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
         },
-      }
-    );
+      });
+    }
+
+    return new Response(object.body, {
+      headers: {
+        "Content-Type":
+          object.httpMetadata?.contentType ||
+          "application/octet-stream",
+        "Cache-Control": "public, max-age=31536000",
+      },
+    });
   },
 };
