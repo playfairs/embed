@@ -4,10 +4,7 @@ export default {
     const key = url.pathname.slice(1);
 
     const object = await env.CDN.get(key);
-
-    if (!object) {
-      return new Response("Not Found", { status: 404 });
-    }
+    if (!object) return new Response("Not Found", { status: 404 });
 
     const filename = key.split("/").pop();
 
@@ -15,13 +12,23 @@ export default {
       ? new Date(object.uploaded).toISOString()
       : "Unknown";
 
+    const ua = request.headers.get("User-Agent") || "";
+    const isDiscord = ua.includes("Discordbot");
+
+    if (!isDiscord) {
+      return new Response(object.body, {
+        headers: {
+          "Content-Type":
+            object.httpMetadata?.contentType ||
+            "application/octet-stream",
+          "Cache-Control": "public, max-age=31536000",
+        },
+      });
+    }
+
     const imageUrl = `https://cdn.playfairs.cc/${key}`;
 
-    const ua = request.headers.get("User-Agent") || "";
-    const isDiscord = ua.toLowerCase().includes("discord");
-
-    if (isDiscord) {
-      return new Response(
+    return new Response(
 `<!DOCTYPE html>
 <html>
 <head>
@@ -41,16 +48,7 @@ export default {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
         },
-      });
-    }
-
-    return new Response(object.body, {
-      headers: {
-        "Content-Type":
-          object.httpMetadata?.contentType ||
-          "application/octet-stream",
-        "Cache-Control": "public, max-age=31536000",
-      },
-    });
+      }
+    );
   },
 };
