@@ -17,7 +17,10 @@ export default {
 
     const imageUrl = `https://cdn.playfairs.cc/${key}`;
 
-    if (url.searchParams.get("embed") === "1") {
+    const ua = request.headers.get("User-Agent") || "";
+    const isDiscord = ua.toLowerCase().includes("discord");
+
+    if (isDiscord) {
       return new Response(
 `<!DOCTYPE html>
 <html>
