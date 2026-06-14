@@ -1,0 +1,7 @@
+name = "embed"
+main = "src/index.js"
+compatibility_date = "2026-06-14"
+
+[[r2_buckets]]
+binding = "CDN"
+bucket_name = "cdn"
