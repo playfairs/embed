@@ -27,10 +27,6 @@ export default {
       ? new Date(object.uploaded)
       : null;
 
-    const createdISO = created
-      ? created.toISOString()
-      : "Unknown";
-
     const createdDisplay = created
       ? created.toLocaleString("en-US", {
           dateStyle: "medium",
@@ -48,6 +44,7 @@ export default {
     };
 
     const fileSize = formatBytes(object.size);
+    const description = `I wasted ${fileSize} on this`;
 
     const escapeHTML = (value) =>
       String(value)
@@ -58,7 +55,6 @@ export default {
         .replace(/'/g, "&#039;");
 
     const safeFilename = escapeHTML(filename);
-    const description = `I wasted ${fileSize} on this`;
 
     const ua = request.headers.get("User-Agent") || "";
     const isDiscord = ua.includes("Discordbot");
@@ -79,12 +75,16 @@ export default {
 <html>
 <head>
 <meta charset="utf-8">
+
 <meta property="og:title" content="${safeFilename}">
 <meta property="og:description" content="${description}">
 <meta property="og:image" content="${imageUrl}">
 <meta property="og:type" content="website">
+
 <meta name="twitter:card" content="summary_large_image">
+
 <title>${safeFilename}</title>
+
 <style>
   * {
     box-sizing: border-box;
@@ -97,7 +97,12 @@ export default {
     flex-direction: column;
     background: #0a0a0a;
     color: #fff;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
   }
 
   main {
@@ -115,17 +120,21 @@ export default {
   }
 </style>
 </head>
+
 <body>
+
 <main></main>
 
 <footer>
   Uploaded ${escapeHTML(createdDisplay)}
 </footer>
+
 </body>
 </html>`,
       {
         headers: {
           "Content-Type": "text/html; charset=UTF-8",
+          "Cache-Control": "no-cache",
         },
       }
     );
