@@ -25,6 +25,8 @@ export default {
 
     const created = object.uploaded ? new Date(object.uploaded) : null;
 
+    const createdISO = created ? created.toISOString() : null;
+
     const createdDisplay = created
       ? created.toLocaleString("en-US", {
           dateStyle: "medium",
@@ -33,6 +35,7 @@ export default {
       : "Unknown";
 
     const formatBytes = (bytes) => {
+      if (!Number.isFinite(bytes)) return "an unknown amount";
       if (bytes === 0) return "0 B";
 
       const units = ["B", "KB", "MB", "GB", "TB"];
@@ -42,6 +45,7 @@ export default {
     };
 
     const fileSize = formatBytes(object.size);
+
     const description = `i'm wasting ${fileSize} on this fucking shit`;
 
     const escapeHTML = (value) =>
@@ -75,9 +79,12 @@ export default {
 <meta charset="utf-8">
 
 <meta property="og:title" content="${safeFilename}">
-<meta property="og:description" content="${description}">
+<meta property="og:description" content="${escapeHTML(description)}">
 <meta property="og:image" content="${imageUrl}">
 <meta property="og:type" content="website">
+
+${createdISO ? `<meta property="article:published_time" content="${createdISO}">` : ""}
+${createdISO ? `<meta name="pubdate" content="${createdISO}">` : ""}
 
 <meta name="twitter:card" content="summary_large_image">
 
