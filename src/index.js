@@ -23,9 +23,7 @@ export default {
 
     const filename = key.split("/").pop();
 
-    const created = object.uploaded
-      ? new Date(object.uploaded)
-      : null;
+    const created = object.uploaded ? new Date(object.uploaded) : null;
 
     const createdDisplay = created
       ? created.toLocaleString("en-US", {
@@ -44,7 +42,7 @@ export default {
     };
 
     const fileSize = formatBytes(object.size);
-    const description = `I wasted ${fileSize} on ts just to look cool with my own cdn 💔`;
+    const description = `i'm wasting ${fileSize} on this fucking shit`;
 
     const escapeHTML = (value) =>
       String(value)
@@ -136,7 +134,7 @@ export default {
           "Content-Type": "text/html; charset=UTF-8",
           "Cache-Control": "no-cache",
         },
-      }
+      },
     );
   },
 };
