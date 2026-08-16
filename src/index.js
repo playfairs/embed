@@ -25,8 +25,6 @@ export default {
 
     const created = object.uploaded ? new Date(object.uploaded) : null;
 
-    const createdISO = created ? created.toISOString() : null;
-
     const createdDisplay = created
       ? created.toLocaleString("en-US", {
           dateStyle: "medium",
@@ -45,7 +43,6 @@ export default {
     };
 
     const fileSize = formatBytes(object.size);
-
     const description = `i'm wasting ${fileSize} on this fucking shit`;
 
     const escapeHTML = (value) =>
@@ -72,6 +69,17 @@ export default {
 
     const imageUrl = `https://cdn.playfairs.cc/raw/${key}`;
 
+    const embedColor = "#0a0a0a";
+
+    const embed = {
+      other: {
+        "theme-color": embedColor,
+        ...(created && {
+          pubdate: new Date(object.uploaded).toISOString(),
+        }),
+      },
+    };
+
     return new Response(
       `<!DOCTYPE html>
 <html>
@@ -82,9 +90,6 @@ export default {
 <meta property="og:description" content="${escapeHTML(description)}">
 <meta property="og:image" content="${imageUrl}">
 <meta property="og:type" content="website">
-
-${createdISO ? `<meta property="article:published_time" content="${createdISO}">` : ""}
-${createdISO ? `<meta name="pubdate" content="${createdISO}">` : ""}
 
 <meta name="twitter:card" content="summary_large_image">
 
