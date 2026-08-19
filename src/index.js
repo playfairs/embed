@@ -43,7 +43,7 @@ export default {
     };
 
     const fileSize = formatBytes(object.size);
-    const description = `i'm wasting ${fileSize} on this fucking shit`;
+    const description = `I'm wasting ${fileSize} on a fucking screenshot to look cool 🥀`;
 
     const escapeHTML = (value) =>
       String(value)
